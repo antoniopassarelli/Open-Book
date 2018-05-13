@@ -46,37 +46,41 @@ public class MinTrianglePath {
 		}
 
 		// calculate solution
+		int w = 0;
 		int[] solution = findShortestPath(triangle);
-		System.out.println("Shortest path:");
+		System.out.print("Minimal path is :");
 		for (int i = 0; i < solution.length; i++) {
 			int n = triangle[i][solution[i]];
+			w += n;
 			System.out.print(n);
 			if (i < solution.length - 1) {
 				System.out.print(" -> ");
 			}
 		}
-		System.out.println();
+		System.out.println(" = " + w);
 	}
 
 	public static int[] findShortestPath(int[][] triangle) {
 		// public TrianglePath findShortestPath(int[][] triangle) {
-		int[][] aux = copy2Array(triangle);
-		int[][] vectors = new int[aux.length][];
+		int[][] copy = copy2Array(triangle);
+		int[][] auxiliray = new int[copy.length][];
 		// iterate rows backward
-		for (int row = aux.length - 2; row >= 0; row--) {
-			vectors[row] = new int[aux[row].length];
+		for (int rowIndex = copy.length - 2; rowIndex >= 0; rowIndex--) {
+			int[] row = copy[rowIndex];
+			int[] nextRow = copy[rowIndex + 1];
+			auxiliray[rowIndex] = new int[row.length];
 			// iterate columns backward
-			for (int col = aux[row].length - 2; col >= 0; col--) {
+			for (int col = row.length - 2; col >= 0; col--) {
 				int min;
-				min = Math.min(aux[row + 1][col], aux[row + 1][col + 1]);
-				aux[row][col] += min;
+				min = Math.min(nextRow[col], nextRow[col + 1]);
+				row[col] += min;
 				// the value in vectors will be the place/column the value came from
-				vectors[row][col] = aux[row + 1][col] == min ? col : col + 1;
+				auxiliray[rowIndex][col] = nextRow[col] == min ? col : col + 1;
 			}
 		}
-		int[] path = new int[vectors.length];
-		for (int i = 1; i < vectors.length; i++) {
-			path[i] = vectors[i - 1][path[i - 1]];
+		int[] path = new int[auxiliray.length];
+		for (int i = 1; i < auxiliray.length; i++) {
+			path[i] = auxiliray[i - 1][path[i - 1]];
 		}
 		// return new TrianglePath(path);
 		return path;
