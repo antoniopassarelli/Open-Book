@@ -68,14 +68,9 @@ public class MinTrianglePath {
 			int[] nextRow = triangle[rowIndex + 1];
 			// iterate columns backward
 			for (int col = rowIndex; col >= 0; col--) {
-				minColIndex = col;// row.length-1;
 				int min;
 				min = Math.min(nextRow[col], nextRow[col + 1]);
 				row[col] += min;
-				// the value in vectors will be the place/column the value came from
-				if (triangle[rowIndex][col] < triangle[rowIndex][minColIndex]) {
-					minColIndex = col;
-				}
 			}
 		}
 		int[] path = new int[triangle.length];
